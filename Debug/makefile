@@ -89,8 +89,8 @@ all: main-build
 main-build: BinarX\ Rocket\ Payload.elf secondary-outputs
 
 # Tool invocations
-BinarX\ Rocket\ Payload.elf BinarX\ Rocket\ Payload.map: $(OBJS) $(USER_OBJS) C:\Users\238682d\repos\BinarX-Rocket-Payload-Software\STM32L433CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "BinarX Rocket Payload.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\238682d\repos\BinarX-Rocket-Payload-Software\STM32L433CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BinarX Rocket Payload.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+BinarX\ Rocket\ Payload.elf BinarX\ Rocket\ Payload.map: $(OBJS) $(USER_OBJS) C:\Users\rmhow\repos\BinarX-Rocket-Payload-Software\STM32L433CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "BinarX Rocket Payload.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\rmhow\repos\BinarX-Rocket-Payload-Software\STM32L433CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BinarX Rocket Payload.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
