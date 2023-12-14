@@ -31,7 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -61,6 +61,11 @@ void Error_Handler(void);
 #define uSD_CS_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+
+//micro SD card SPI & Pin assignments
+#define SD_SPI_HANDLE hspi2
+#define SD_CS_Pin uSD_CS_Pin
+#define SD_CS_GPIO_Port uSD_CS_GPIO_Port
 
 /* USER CODE END Private defines */
 

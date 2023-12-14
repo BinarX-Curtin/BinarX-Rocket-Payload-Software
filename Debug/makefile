@@ -9,6 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Middlewares/Third_Party/cubeide-sd-card/subdir.mk
 -include Middlewares/Third_Party/FatFs/src/option/subdir.mk
 -include Middlewares/Third_Party/FatFs/src/subdir.mk
 -include FATFS/Target/subdir.mk
@@ -25,6 +26,9 @@ endif
 ifneq ($(strip $(C++_DEPS)),)
 -include $(C++_DEPS)
 endif
+ifneq ($(strip $(CCM_DEPS)),)
+-include $(CCM_DEPS)
+endif
 ifneq ($(strip $(C_UPPER_DEPS)),)
 -include $(C_UPPER_DEPS)
 endif
@@ -36,6 +40,12 @@ ifneq ($(strip $(S_DEPS)),)
 endif
 ifneq ($(strip $(S_UPPER_DEPS)),)
 -include $(S_UPPER_DEPS)
+endif
+ifneq ($(strip $(CXXM_DEPS)),)
+-include $(CXXM_DEPS)
+endif
+ifneq ($(strip $(C++M_DEPS)),)
+-include $(C++M_DEPS)
 endif
 ifneq ($(strip $(C_DEPS)),)
 -include $(C_DEPS)
@@ -79,8 +89,8 @@ all: main-build
 main-build: BinarX\ Rocket\ Payload.elf secondary-outputs
 
 # Tool invocations
-BinarX\ Rocket\ Payload.elf BinarX\ Rocket\ Payload.map: $(OBJS) $(USER_OBJS) C:\Users\238682d\STM32CubeIDE\workspace_1.13.0\BinarX\ Rocket\ Payload\STM32L433CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "BinarX Rocket Payload.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\238682d\STM32CubeIDE\workspace_1.13.0\BinarX Rocket Payload\STM32L433CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BinarX Rocket Payload.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+BinarX\ Rocket\ Payload.elf BinarX\ Rocket\ Payload.map: $(OBJS) $(USER_OBJS) C:\Users\238682d\repos\BinarX-Rocket-Payload-Software\STM32L433CBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "BinarX Rocket Payload.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\238682d\repos\BinarX-Rocket-Payload-Software\STM32L433CBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BinarX Rocket Payload.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

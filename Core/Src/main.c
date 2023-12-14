@@ -118,6 +118,38 @@ int main(void)
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_Delay(1000); //delay to let SD card finish initialisation
+  printf("Finished SD card initialisation delay.\r\n");
+
+  //some variables for FatFs
+  FATFS FatFs; 	//Fatfs handle
+//  FIL f; 		//File handle
+  FRESULT f_res; //Result after operations
+
+  //Open the file system
+  f_res = f_mount(&FatFs, "", 1); //1=mount now
+  if (f_res != FR_OK) {
+    printf("File mount error: (%i)\r\n", f_res);
+    while(1); // stop here if there was an error
+  }
+
+  //Let's get some statistics from the SD card
+  DWORD free_clusters, free_sectors, total_sectors;
+
+  FATFS* getFreeFs;
+
+  f_res = f_getfree("", &free_clusters, &getFreeFs);
+  if (f_res != FR_OK) {
+    printf("f_getfree error (%i)\r\n", f_res);
+ 	while(1); // stop here if there was an error
+  }
+
+  //Formula comes from ChaN's documentation
+  total_sectors = (getFreeFs->n_fatent - 2) * getFreeFs->csize;
+  free_sectors = free_clusters * getFreeFs->csize;
+
+  printf("SD card stats:\r\n%10lu KiB total drive space.\r\n%10lu KiB available.\r\n", total_sectors / 2, free_sectors / 2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -451,7 +483,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
