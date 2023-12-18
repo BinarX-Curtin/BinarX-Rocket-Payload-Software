@@ -121,13 +121,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_Delay(2000); //delay to prevent double printing after reboot during programming
 
-  sprintf(serial_string, "Hello from STM32L4 via UART.\r\n"); //load serial string buffer
-  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+  sprintf(string_buffer, "Hello from STM32L4 via UART.\r\n"); //load serial string buffer
+  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
 
   HAL_Delay(1000); //delay to let SD card finish initialisation
 
-  sprintf(serial_string, "Finished SD card initialisation delay.\r\n"); //load serial string buffer
-  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+  sprintf(string_buffer, "Finished SD card initialisation delay.\r\n"); //load serial string buffer
+  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
 
   //some variables for FatFs
   FATFS FatFs; 	//Fatfs handle
@@ -137,8 +137,8 @@ int main(void)
   //Open the file system
   fr = f_mount(&FatFs, "", 1); //1=mount now
   if (fr != FR_OK) {
-	  sprintf(serial_string, "File mount error: (%i)\r\n", fr);
-	  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+	  sprintf(string_buffer, "File mount error: (%i)\r\n", fr);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
     while(1); // stop here if there was an error
   }
 
@@ -149,8 +149,8 @@ int main(void)
 
   fr = f_getfree("", &free_clusters, &getFreeFs);
   if (fr != FR_OK) {
-	  sprintf(serial_string, "f_getfree error (%i)\r\n", fr);
-	  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+	  sprintf(string_buffer, "f_getfree error (%i)\r\n", fr);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
  	while(1); // stop here if there was an error
   }
 
@@ -158,18 +158,18 @@ int main(void)
   total_sectors = (getFreeFs->n_fatent - 2) * getFreeFs->csize;
   free_sectors = free_clusters * getFreeFs->csize;
 
-  sprintf(serial_string, "SD card stats:\r\n%10lu KiB total drive space.\r\n%10lu KiB available.\r\n", total_sectors / 2, free_sectors / 2);
-  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+  sprintf(string_buffer, "SD card stats:\r\n%10lu KiB total drive space.\r\n%10lu KiB available.\r\n", total_sectors / 2, free_sectors / 2);
+  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
 
   //Now let's try to open file "test.txt"
   fr = f_open(&f, "hello.txt", FA_READ);
   if (fr != FR_OK) {
-  sprintf(serial_string, "f_open error (%i)\r\n", fr);
-  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+  sprintf(string_buffer, "f_open error (%i)\r\n", fr);
+  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   while(1); // stop here if there was an error
     }
-  sprintf(serial_string, "I was able to open \"hello.txt\" for reading!\r\n");
-  HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+  sprintf(string_buffer, "I was able to open \"hello.txt\" for reading!\r\n");
+  HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
 
   //Read 30 bytes from "test.txt" on the SD card
   BYTE readBuf[30];
@@ -178,11 +178,11 @@ int main(void)
   //f_gets is a wrapper on f_read that does some string formatting for us
   TCHAR* r_res = f_gets((TCHAR*)readBuf, 30, &f);
   if(r_res != 0) {
-	sprintf(serial_string, "Read string from 'hello_world.txt' contents: %s\r\n", readBuf);
-	HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+	sprintf(string_buffer, "Read string from 'hello_world.txt' contents: %s\r\n", readBuf);
+	HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   } else {
-	sprintf(serial_string, "f_gets error (%i)\r\n", fr);
-	HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+	sprintf(string_buffer, "f_gets error (%i)\r\n", fr);
+	HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   }
 
   //close file
@@ -190,24 +190,24 @@ int main(void)
 
   fr = f_open(&f, "data.csv", FA_WRITE | FA_OPEN_APPEND);
   if(fr == FR_OK) {
-	sprintf(serial_string, "Opened data.csv for writing (appending lines)\r\n");
-	HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+	sprintf(string_buffer, "Opened data.csv for writing (appending lines)\r\n");
+	HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   }
   else {
-	sprintf(serial_string, "f_open error (%i)\r\n", fr);
-	HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+	sprintf(string_buffer, "f_open error (%i)\r\n", fr);
+	HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   }
 
   UINT bytes_written;
-  sprintf(file_string, "An additional line.\r\n");
-  fr = f_write(&f, file_string, strlen(file_string), &bytes_written);
+  sprintf(string_buffer, "An additional line.\r\n");
+  fr = f_write(&f, string_buffer, strlen(string_buffer), &bytes_written);
   if (fr == FR_OK) {
-    sprintf(serial_string, "Wrote %i bytes to data.csv.\r\n", bytes_written);
-    HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+    sprintf(string_buffer, "Wrote %i bytes to data.csv.\r\n", bytes_written);
+    HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   }
   else {
-    sprintf(serial_string, "f_write error (%i)\r\n", fr);
-    HAL_UART_Transmit(&huart1, (uint8_t *)serial_string, strlen(serial_string), 10); //transmit serial_string with a 10ms timeout using USART1
+    sprintf(string_buffer, "f_write error (%i)\r\n", fr);
+    HAL_UART_Transmit(&huart1, (uint8_t *)string_buffer, strlen(string_buffer), 10); //transmit serial_string with a 10ms timeout using USART1
   }
 
   f_close(&f);
